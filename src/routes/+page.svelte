@@ -1,11 +1,19 @@
 <script>
-	// import { TinySlider } from 'svelte-tiny-slider';
+	import { enhance } from '$app/forms';
 	/** @type {import('./$types').PageData} */
 	export let data;
-</script>
 
-<h1 class="text-3xl font-bold underline">Hello world!</h1>
-<button class="btn">Button</button>
+	let searchData = '';
+
+	const searchFunc = () => {
+		console.log('searchFiled', searchData);
+		fetch(`https://dummyjson.com/products/search?q=${searchData}`)
+			.then((res) => res.json())
+			.then((resData) => {
+				data.products = resData.products;
+			});
+	};
+</script>
 
 <h1>List from dummyjson</h1>
 
@@ -15,33 +23,17 @@
 	>
 </p>
 
-{#each data.products as product}
-	<div><img src={product.thumbnail} alt="thumbnailFromList" /></div>
-	<div>ID {product.id}</div>
-	<div>TITLE {product.title}</div>
-	<div>Description {product.description}</div>
-	<div>Price {product.price} $</div>
-{/each}
+<div class="join">
+	<input
+		class="input input-bordered join-item"
+		name="search"
+		bind:value={searchData}
+		placeholder="Search"
+	/>
+	<button class="btn join-item rounded-r-full" on:click={searchFunc}>Search</button>
+</div>
 
-<!-- <TinySlider>
-	{#each data.products.images as item}
-		<img src={item} alt="" />
-	{/each}
-
-	<div slot="controls" let:setIndex let:currentIndex>
-		{#each data.products.images as _, i}
-			<button
-				class:active={i == currentIndex}
-				on:click={() => setIndex(i)}
-				on:focus={() => setIndex(i)}
-			>
-				<img src={_} alt="" height="60" />
-			</button>
-		{/each}
-	</div>
-</TinySlider> -->
-
-<!-- <div class="overflow-x-auto">
+<div class="overflow-x-auto">
 	<table class="table">
 		<thead>
 			<tr>
@@ -50,15 +42,14 @@
 						<input type="checkbox" class="checkbox" />
 					</label>
 				</th>
-				<th>Name</th>
-				<th>Job</th>
-				<th>Favorite Color</th>
+				<th>Title</th>
+				<th>Description</th>
+				<th>Rating</th>
 				<th></th>
 			</tr>
 		</thead>
 		<tbody>
-			{#each data.products.images as imageSrc}
-				<p>{imageSrc}</p>
+			{#each data.products as product, index}
 				<tr>
 					<th>
 						<label>
@@ -69,21 +60,37 @@
 						<div class="flex items-center gap-3">
 							<div class="avatar">
 								<div class="mask mask-squircle w-12 h-12">
-									<img src={imageSrc} alt="Avatar Tailwind CSS Component" />
+									<img src={product.thumbnail} alt="Avatar Tailwind CSS Component" />
 								</div>
 							</div>
 							<div>
-								<div class="font-bold">Hart Hagerty</div>
-								<div class="text-sm opacity-50">United States</div>
+								<div class="font-bold">{product.title}</div>
+								<div class="text-sm opacity-50 text-red-500 line-through">{product.price} $</div>
+								<div class="text-sm opacity-50">
+									{product.price - (product.price / 100) * product.discountPercentage} $
+								</div>
 							</div>
 						</div>
 					</td>
 					<td>
-						Zemlak, Daniel and Leannon
+						{product.description}
 						<br />
-						<span class="badge badge-ghost badge-sm">Desktop Support Technician</span>
+						<span class="badge badge-ghost badge-sm">{product.brand}</span>
 					</td>
-					<td>Purple</td>
+					<td>
+						<div class="rating">
+							<input type="radio" name="rating-{index}" class="mask mask-star-2 bg-green-500" />
+							<input type="radio" name="rating-{index}" class="mask mask-star-2 bg-green-500" />
+							<input type="radio" name="rating-{index}" class="mask mask-star-2 bg-green-500" />
+							<input
+								type="radio"
+								name="rating-{index}"
+								class="mask mask-star-2 bg-green-500"
+								checked
+							/>
+							<input type="radio" name="rating-{index}" class="mask mask-star-2 bg-green-500" />
+						</div>
+					</td>
 					<th>
 						<button class="btn btn-ghost btn-xs">details</button>
 					</th>
@@ -100,4 +107,4 @@
 			</tr>
 		</tfoot>
 	</table>
-</div> -->
+</div>
