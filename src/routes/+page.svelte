@@ -1,9 +1,9 @@
 <script>
-	import { enhance } from '$app/forms';
 	/** @type {import('./$types').PageData} */
 	export let data;
 
 	let searchData = '';
+	let openDialog = false;
 
 	const searchFunc = () => {
 		console.log('searchFiled', searchData);
@@ -13,7 +13,39 @@
 				data.products = resData.products;
 			});
 	};
+
+	let productDataFormDialog = {};
+
+	const getProductData = (product) => {
+		console.log('product_25', product);
+		productDataFormDialog = product;
+		openDialog = true;
+	};
 </script>
+
+<dialog class="modal" class:modal-open={openDialog}>
+	<div class="modal-box">
+		<form method="dialog">
+			<button
+				class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2"
+				on:click={() => (openDialog = false)}>✕</button
+			>
+		</form>
+		<h3 class="font-bold text-lg">Hello!</h3>
+		<div class="card card-compact bg-base-100 shadow-xl">
+			<figure>
+				<img src={productDataFormDialog.thumbnail} alt="Shoes" />
+			</figure>
+			<div class="card-body">
+				<h2 class="card-title">Shoes!</h2>
+				<p>If a dog chews shoes whose shoes does he choose?</p>
+				<div class="card-actions justify-end">
+					<button class="btn btn-primary">Buy Now</button>
+				</div>
+			</div>
+		</div>
+	</div>
+</dialog>
 
 <h1>List from dummyjson</h1>
 
@@ -92,7 +124,7 @@
 						</div>
 					</td>
 					<th>
-						<button class="btn btn-ghost btn-xs">details</button>
+						<button class="btn btn-ghost btn-xs" on:click={getProductData(product)}>details</button>
 					</th>
 				</tr>
 			{/each}
