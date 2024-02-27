@@ -4,6 +4,13 @@
 
 	let searchData = '';
 	let openDialog = false;
+	let countProductInCart = 0;
+	let productsInCart = [];
+
+	const addProductToCart = (productData) => {
+		productsInCart.push(productData);
+		console.log('productsInCart', productsInCart);
+	};
 
 	const searchFunc = () => {
 		console.log('searchFiled', searchData);
@@ -31,16 +38,22 @@
 				on:click={() => (openDialog = false)}>✕</button
 			>
 		</form>
-		<h3 class="font-bold text-lg">Hello!</h3>
 		<div class="card card-compact bg-base-100 shadow-xl">
 			<figure>
 				<img src={productDataFormDialog.thumbnail} alt="Shoes" />
 			</figure>
 			<div class="card-body">
-				<h2 class="card-title">Shoes!</h2>
-				<p>If a dog chews shoes whose shoes does he choose?</p>
-				<div class="card-actions justify-end">
-					<button class="btn btn-primary">Buy Now</button>
+				<h2 class="card-title">{productDataFormDialog.title}</h2>
+				<p>{productDataFormDialog.description}</p>
+				<p>Remains: {productDataFormDialog.stock}</p>
+				<div class="card-actions justify-between">
+					<div>
+						{productDataFormDialog.price -
+							(productDataFormDialog.price / 100) * productDataFormDialog.discountPercentage} $
+					</div>
+					<button class="btn btn-primary" on:click={addProductToCart(productDataFormDialog)}
+						>Buy Now</button
+					>
 				</div>
 			</div>
 		</div>
@@ -55,14 +68,22 @@
 	>
 </p>
 
-<div class="join">
-	<input
-		class="input input-bordered join-item"
-		name="search"
-		bind:value={searchData}
-		placeholder="Search"
-	/>
-	<button class="btn join-item rounded-r-full" on:click={searchFunc}>Search</button>
+<div class="flex justify-between p-10">
+	<!-- Пошук -->
+	<div class="join">
+		<input
+			class="input input-bordered join-item"
+			name="search"
+			bind:value={searchData}
+			placeholder="Search"
+		/>
+		<button class="btn join-item rounded-r-full" on:click={searchFunc}>Search</button>
+	</div>
+	<!-- Корзина -->
+	<div class="indicator">
+		<span class="indicator-item badge badge-secondary">{countProductInCart}</span>
+		<button class="btn">Cart</button>
+	</div>
 </div>
 
 <div class="overflow-x-auto">
