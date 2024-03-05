@@ -10,14 +10,19 @@
 	let productsCartSumm = 0;
 
 	const addProductToCart = (productData) => {
-		productsInCart.push(productData);
-		console.log('productsInCart', productsInCart);
-		countProductInCart = countProductInCart + 1;
-		productsInCart = productsInCart;
-		productsCartSumm =
-			productsCartSumm +
-			productData.price -
-			(productData.price / 100) * productData.discountPercentage;
+		const isProductInCart = productsInCart.find((product) => product.id === productData.id);
+		console.log('isProductInCart', isProductInCart);
+
+		if (isProductInCart === undefined) {
+			productsInCart.push(productData);
+			console.log('productsInCart', productsInCart);
+			countProductInCart = countProductInCart + 1;
+			productsInCart = productsInCart;
+			productsCartSumm =
+				productsCartSumm +
+				productData.price -
+				(productData.price / 100) * productData.discountPercentage;
+		}
 	};
 
 	const searchFunc = () => {
@@ -204,7 +209,7 @@
 	</div>
 	<div class="drawer-side z-10">
 		<label for="my-drawer-4" aria-label="close sidebar" class="drawer-overlay"></label>
-		<ul class="menu p-4 w-150 min-h-full bg-base-200 text-base-content">
+		<ul class="menu p-4 w-96 min-h-full bg-base-200 text-base-content">
 			<!-- Sidebar content here -->
 			{#if productsInCart.length}
 				{#each productsInCart as product}
@@ -223,8 +228,16 @@
 								{product.price - (product.price / 100) * product.discountPercentage} $
 							</div>
 						</div>
+						<!-- Лічильник продукта в корзині -->
 						<div class="join">
-							<button class="btn join-item">
+							<button
+								class="btn join-item"
+								on:click={() => {
+									if (product.count > 1) {
+										product.count = product.count - 1;
+									}
+								}}
+							>
 								<svg
 									class="h-10 w-10"
 									viewBox="0 0 24 24"
@@ -241,10 +254,22 @@
 							</button>
 							<div>
 								<div>
-									<input type="number" class="input input-bordered join-item w-20" />
+									<input
+										type="number"
+										readonly
+										class="input input-bordered join-item w-20"
+										value={product.count}
+									/>
 								</div>
 							</div>
-							<button class="btn join-item">
+							<button
+								class="btn join-item"
+								on:click={() => {
+									if (product.count !== product.stock) {
+										product.count = product.count + 1;
+									}
+								}}
+							>
 								<svg
 									class="h-10 w-10"
 									viewBox="0 0 24 24"
