@@ -6,8 +6,19 @@
 	let openDialog = false;
 	let isOpenCartSideBar = false;
 	let countProductInCart = 0;
+	// Продукти корзини
 	let productsInCart = [];
+	// Сумма всіх товарів
 	let productsCartSumm = 0;
+
+	const countSum = () => {
+		productsCartSumm = 0;
+		let sum = 0;
+		productsInCart.forEach((product) => {
+			sum += product.sum;
+		});
+		productsCartSumm = sum;
+	};
 
 	const addProductToCart = (productData) => {
 		const isProductInCart = productsInCart.find((product) => product.id === productData.id);
@@ -18,10 +29,6 @@
 			console.log('productsInCart', productsInCart);
 			countProductInCart = countProductInCart + 1;
 			productsInCart = productsInCart;
-			productsCartSumm =
-				productsCartSumm +
-				productData.price -
-				(productData.price / 100) * productData.discountPercentage;
 		}
 	};
 
@@ -95,7 +102,15 @@
 	<!-- Корзина -->
 	<div class="indicator">
 		<span class="indicator-item badge badge-secondary">{countProductInCart}</span>
-		<button class="btn" on:click={() => (isOpenCartSideBar = !isOpenCartSideBar)}>
+		<button
+			class="btn"
+			on:click={() => {
+				isOpenCartSideBar = !isOpenCartSideBar;
+				if (isOpenCartSideBar) {
+					countSum();
+				}
+			}}
+		>
 			<svg class="h-6 w-6" viewBox="-0.5 0 25 25" fill="none" xmlns="http://www.w3.org/2000/svg">
 				<path
 					d="M18.5996 21.57C19.7042 21.57 20.5996 20.6746 20.5996 19.57C20.5996 18.4654 19.7042 17.57 18.5996 17.57C17.495 17.57 16.5996 18.4654 16.5996 19.57C16.5996 20.6746 17.495 21.57 18.5996 21.57Z"
@@ -267,6 +282,7 @@
 								on:click={() => {
 									if (product.count !== product.stock) {
 										product.count = product.count + 1;
+										countSum(product, product.count);
 									}
 								}}
 							>
