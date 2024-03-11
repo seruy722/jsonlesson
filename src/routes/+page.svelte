@@ -15,7 +15,7 @@
 		productsCartSumm = 0;
 		let sum = 0;
 		productsInCart.forEach((product) => {
-			sum += product.sum;
+			sum += product.sum * product.count;
 		});
 		productsCartSumm = sum;
 	};
@@ -224,7 +224,7 @@
 	</div>
 	<div class="drawer-side z-10">
 		<label for="my-drawer-4" aria-label="close sidebar" class="drawer-overlay"></label>
-		<ul class="menu p-4 w-96 min-h-full bg-base-200 text-base-content">
+		<ul class="menu p-4 w-150 min-h-full bg-base-200 text-base-content">
 			<!-- Sidebar content here -->
 			{#if productsInCart.length}
 				{#each productsInCart as product}
@@ -250,6 +250,7 @@
 								on:click={() => {
 									if (product.count > 1) {
 										product.count = product.count - 1;
+										countSum();
 									}
 								}}
 							>
@@ -282,7 +283,7 @@
 								on:click={() => {
 									if (product.count !== product.stock) {
 										product.count = product.count + 1;
-										countSum(product, product.count);
+										countSum();
 									}
 								}}
 							>
@@ -297,6 +298,37 @@
 										clip-rule="evenodd"
 										d="M12.2929 4.29289C12.6834 3.90237 13.3166 3.90237 13.7071 4.29289L20.7071 11.2929C21.0976 11.6834 21.0976 12.3166 20.7071 12.7071L13.7071 19.7071C13.3166 20.0976 12.6834 20.0976 12.2929 19.7071C11.9024 19.3166 11.9024 18.6834 12.2929 18.2929L17.5858 13H4C3.44772 13 3 12.5523 3 12C3 11.4477 3.44772 11 4 11H17.5858L12.2929 5.70711C11.9024 5.31658 11.9024 4.68342 12.2929 4.29289Z"
 										fill="#000000"
+									/>
+								</svg>
+							</button>
+							<button
+								class="btn join-item"
+								on:click={() => {
+									const productIndex = productsInCart.findIndex((el) => product.id === el.id);
+									product.count = 1;
+									productsInCart.splice(productIndex, 1);
+									productsInCart = productsInCart;
+									countProductInCart -= 1;
+									countSum();
+								}}
+							>
+								<svg
+									class="h-10 w-10"
+									viewBox="0 0 24 24"
+									fill="none"
+									xmlns="http://www.w3.org/2000/svg"
+								>
+									<path
+										opacity="0.5"
+										d="M2 12C2 7.28595 2 4.92893 3.46447 3.46447C4.92893 2 7.28595 2 12 2C16.714 2 19.0711 2 20.5355 3.46447C22 4.92893 22 7.28595 22 12C22 16.714 22 19.0711 20.5355 20.5355C19.0711 22 16.714 22 12 22C7.28595 22 4.92893 22 3.46447 20.5355C2 19.0711 2 16.714 2 12Z"
+										stroke="#1C274C"
+										stroke-width="1.5"
+									/>
+									<path
+										d="M14.5 9.50002L9.5 14.5M9.49998 9.5L14.5 14.5"
+										stroke="#1C274C"
+										stroke-width="1.5"
+										stroke-linecap="round"
 									/>
 								</svg>
 							</button>
