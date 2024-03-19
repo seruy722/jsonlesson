@@ -1,8 +1,11 @@
 <script>
+	import { enhance } from '$app/forms';
 	let typePassword = 'password';
+	export let data;
 </script>
 
-<form class="control">
+<div>{data.user.email}</div>
+<form class="form-control max-w-sm" method="post" use:enhance>
 	<!-- EMAIL -->
 	<label class="input input-bordered flex items-center gap-2">
 		<svg
@@ -16,7 +19,7 @@
 				d="M15 6.954 8.978 9.86a2.25 2.25 0 0 1-1.956 0L1 6.954V11.5A1.5 1.5 0 0 0 2.5 13h11a1.5 1.5 0 0 0 1.5-1.5V6.954Z"
 			/></svg
 		>
-		<input type="text" class="grow" placeholder="Email" />
+		<input type="text" name="email" class="grow" placeholder="Email" />
 	</label>
 	<!-- PASSWORD -->
 	<label class="input input-bordered flex items-center gap-2">
@@ -31,7 +34,7 @@
 				clip-rule="evenodd"
 			/></svg
 		>
-		<input type={typePassword} class="grow" value="password" />
+		<input type={typePassword} name="password" class="grow" placeholder="*******" />
 		<button
 			type="button"
 			on:click={() =>
