@@ -20,7 +20,18 @@ function validateEmail(email) {
 }
 
 export const actions = {
-	default: async (event) => {
+	login: async (event) => {
+		const formData = Object.fromEntries(await event.request.formData());
+		console.log('formData', formData);
+		if (validateEmail(formData.email)) {
+			const findedUser = users.find((user) => user.email === formData.email);
+			console.log('findedUser', findedUser);
+			if (findedUser !== undefined && formData.password === findedUser?.password) {
+				logedUser = findedUser;
+			}
+		}
+	},
+	register: async (event) => {
 		const formData = Object.fromEntries(await event.request.formData());
 		console.log('formData', formData);
 		if (validateEmail(formData.email)) {
