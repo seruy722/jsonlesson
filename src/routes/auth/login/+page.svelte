@@ -95,7 +95,26 @@
 	</form>
 {:else if tabActive === 'register'}
 	REGISTER USER
-	<form class="form-control max-w-sm" method="post" action="?/register" use:enhance>
+	<form
+		class="form-control max-w-sm"
+		method="post"
+		action="/auth/login?/register"
+		use:enhance={({ formElement, formData, action, cancel, submitter }) => {
+			// `formElement` is this `<form>` element
+			// `formData` is its `FormData` object that's about to be submitted
+			// `action` is the URL to which the form is posted
+			// calling `cancel()` will prevent the submission
+			// `submitter` is the `HTMLElement` that caused the form to be submitted
+
+			return async ({ result, update }) => {
+				if (result.type === 'failure') {
+					console.log('result', result);
+				}
+				// `result` is an `ActionResult` object
+				// `update` is a function which triggers the default logic that would be triggered if this callback wasn't set
+			};
+		}}
+	>
 		<!-- EMAIL -->
 		<label class="input input-bordered flex items-center gap-2">
 			<svg

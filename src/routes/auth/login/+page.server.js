@@ -1,3 +1,4 @@
+import { fail } from '@sveltejs/kit';
 const users = [
 	{
 		email: 'yan@gmail.com',
@@ -33,12 +34,29 @@ export const actions = {
 	},
 	register: async (event) => {
 		const formData = Object.fromEntries(await event.request.formData());
-		console.log('formData', formData);
+		const findedUser = users.find((user) => user.email === formData.email);
+		console.log('RformData', formData);
+		if (findedUser !== undefined) {
+			return fail(400, { message: 'User is now register!' });
+		}
+		if (!validateEmail(formData.email)) {
+			return fail(400, { email: formData.email, message: 'Email is not valid!' });
+		}
+
+		if (!formData.password || formData.password.length < 6) {
+			return fail(400, { password: formData.password, message: 'Password is more 6 character!' });
+		}
+
 		if (validateEmail(formData.email)) {
 			const findedUser = users.find((user) => user.email === formData.email);
 			console.log('findedUser', findedUser);
-			if (findedUser !== undefined && formData.password === findedUser?.password) {
-				logedUser = findedUser;
+			if (findedUser === undefined && formData.password) {
+				const newUser = {
+					email: formData.email,
+					password: formData.password
+				};
+				users.push(newUser);
+				logedUser = newUser;
 			}
 		}
 	}
