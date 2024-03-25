@@ -35,16 +35,15 @@ export const actions = {
 	register: async (event) => {
 		const formData = Object.fromEntries(await event.request.formData());
 		const findedUser = users.find((user) => user.email === formData.email);
-		console.log('RformData', formData);
 		if (findedUser !== undefined) {
 			return fail(400, { message: 'User is now register!' });
 		}
 		if (!validateEmail(formData.email)) {
-			return fail(400, { email: formData.email, message: 'Email is not valid!' });
+			return fail(400, { email: 'Email is not valid!' });
 		}
 
 		if (!formData.password || formData.password.length < 6) {
-			return fail(400, { password: formData.password, message: 'Password is more 6 character!' });
+			return fail(400, { password: 'Password is more 6 character!' });
 		}
 
 		if (validateEmail(formData.email)) {

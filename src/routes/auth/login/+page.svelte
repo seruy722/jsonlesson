@@ -4,6 +4,7 @@
 	export let data;
 
 	let tabActive = 'login';
+	let errors = {};
 </script>
 
 <div>{data.user.email || 'Not authorized!'}</div>
@@ -109,6 +110,7 @@
 			return async ({ result, update }) => {
 				if (result.type === 'failure') {
 					console.log('result', result);
+					errors = result.data;
 				}
 				// `result` is an `ActionResult` object
 				// `update` is a function which triggers the default logic that would be triggered if this callback wasn't set
@@ -128,8 +130,15 @@
 					d="M15 6.954 8.978 9.86a2.25 2.25 0 0 1-1.956 0L1 6.954V11.5A1.5 1.5 0 0 0 2.5 13h11a1.5 1.5 0 0 0 1.5-1.5V6.954Z"
 				/></svg
 			>
-			<input type="text" name="email" class="grow" placeholder="Email" />
+			<input
+				type="text"
+				name="email"
+				class="grow input"
+				placeholder="Email"
+				class:input-error={errors.email}
+			/>
 		</label>
+		<div>{errors.email || ''}</div>
 		<!-- PASSWORD -->
 		<label class="input input-bordered flex items-center gap-2">
 			<svg
@@ -143,7 +152,14 @@
 					clip-rule="evenodd"
 				/></svg
 			>
-			<input type={typePassword} name="password" class="grow" placeholder="*******" />
+			<input
+				type={typePassword}
+				name="password"
+				class="grow input"
+				placeholder="*******"
+				class:input-error={errors.password}
+			/>
+
 			<button
 				type="button"
 				on:click={() =>
@@ -180,7 +196,7 @@
 				{/if}
 			</button>
 		</label>
-
+		<div>{errors.password || ''}</div>
 		<button class="btn btn-primary">Register</button>
 	</form>
 {/if}
