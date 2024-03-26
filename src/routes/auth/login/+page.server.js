@@ -1,4 +1,5 @@
 import { fail } from '@sveltejs/kit';
+import bcrypt from 'bcrypt';
 const users = [
 	{
 		email: 'yan@gmail.com',
@@ -30,7 +31,8 @@ export const actions = {
 			errorsObj.email = 'Email is not valid!';
 		}
 
-		if (findedUser !== undefined && formData.password === findedUser?.password) {
+		const isPasswordCompare = bcrypt.compareSync(formData.password, findedUser?.password);
+		if (findedUser !== undefined && isPasswordCompare) {
 			console.log('LogUser');
 			logedUser = findedUser;
 		} else {
@@ -65,9 +67,11 @@ export const actions = {
 			const findedUser = users.find((user) => user.email === formData.email);
 			console.log('findedUser', findedUser);
 			if (findedUser === undefined && formData.password) {
+				const salt = bcrypt.genSaltSync(10);
+				const hash = bcrypt.hashSync(formData.password, salt);
 				const newUser = {
 					email: formData.email,
-					password: formData.password
+					password: hash
 				};
 				users.push(newUser);
 				logedUser = newUser;
