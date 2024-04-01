@@ -1,5 +1,6 @@
 <script>
 	import { enhance } from '$app/forms';
+	import { goto } from '$app/navigation';
 	let typePassword = 'password';
 	export let data;
 
@@ -38,11 +39,14 @@
 			// `submitter` is the `HTMLElement` that caused the form to be submitted
 
 			return async ({ result, update }) => {
+				console.log('result', result);
 				if (result.type === 'failure') {
 					console.log('result', result);
 					errorsLogin = result.data;
 				} else if (result.type === 'success') {
 					data.user = result.data;
+				} else if (result.type === 'redirect') {
+					goto(result.location);
 				}
 				// `result` is an `ActionResult` object
 				// `update` is a function which triggers the default logic that would be triggered if this callback wasn't set
