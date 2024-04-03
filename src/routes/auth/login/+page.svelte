@@ -154,6 +154,8 @@
 					errorsRegister = result.data;
 				} else if (result.type === 'success') {
 					data.user = result.data;
+				} else if (result.type === 'redirect') {
+					goto(result.location);
 				}
 				// `result` is an `ActionResult` object
 				// `update` is a function which triggers the default logic that would be triggered if this callback wasn't set

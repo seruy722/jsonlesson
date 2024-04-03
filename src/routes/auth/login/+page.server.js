@@ -91,6 +91,6 @@ export const actions = {
 				logedUser = newUser;
 			}
 		}
-		return logedUser;
+		return redirect(302, '/');
 	}
 };
